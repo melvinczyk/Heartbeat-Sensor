@@ -80,7 +80,6 @@ void setup() {
   delay(1000);
   Serial.println("Starting...");
 
-  // Step 1: TCA9534 loop on Wire (19/20) — makes lcd.init() work
   Wire.begin(19, 20);
   delay(100);
   uint8_t addresses[] = {0x18, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
@@ -94,7 +93,6 @@ void setup() {
   }
   Serial.println("TCA9534 loop done");
 
-  // Step 2: init display
   Serial.println("Calling lcd.init()...");
   lcd.init();
   Serial.println("lcd.init() done!");
@@ -104,13 +102,10 @@ void setup() {
   lcd.setTextSize(2);
   lcd.drawString("Finding sensor...", 20, 20);
 
-  // Step 3: re-init Wire1 fresh right before sensor init
-  // TCA9534 library corrupts bus state — this resets it
   Wire1.begin(15, 16);
   delay(1000);
   Serial.println("Wire1 re-init done");
 
-  // Step 4: init sensor
   Serial.println("Calling vl53.begin()...");
   if (!vl53.begin(0x29, &Wire1)) {
     lcd.fillScreen(TFT_BLACK);
